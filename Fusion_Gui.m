@@ -81,6 +81,7 @@ function view_ms_but_Callback(hObject, eventdata, handles)
 figure,
 axis on;
 plot_ms_image(handles);
+% imshow(handles.M);
 
 % --- Executes on button press in view_pan_img.
 function view_pan_img_Callback(hObject, eventdata, handles)
@@ -90,6 +91,7 @@ function view_pan_img_Callback(hObject, eventdata, handles)
 figure,
 axis on;
 plot_pan_image(handles);
+% imshow(handles.P);
 
 
 % --- Executes on selection change in select_img_popdown.
@@ -171,6 +173,7 @@ cd('..');
 handles.M=MS;
 % handles.M=double(handles.M);
 handles.P=PAN;
+
 % handles.P=double(handles.P);
 guidata(hObject,handles);
 
@@ -218,6 +221,7 @@ function brightning_slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 val=get(hObject,'Value');
+set(handles.brightness_slider_value,'String',num2str(val));
 
 % axes(handles.ms_img_axes);
 % 
@@ -250,6 +254,7 @@ function darkening_slider_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 val=get(hObject,'Value');
+set(handles.darkness_slider_value,'String',num2str(val));
 % axes(handles.ms_img_axes);
 % 
 % imagesc(handles.Mnormed(:,:,1:3));

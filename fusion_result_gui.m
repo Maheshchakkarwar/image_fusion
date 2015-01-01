@@ -22,7 +22,7 @@ function varargout = fusion_result_gui(varargin)
 
 % Edit the above text to modify the response to help fusion_result_gui
 
-% Last Modified by GUIDE v2.5 10-Dec-2014 18:57:31
+% Last Modified by GUIDE v2.5 25-Dec-2014 15:41:12
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -88,9 +88,16 @@ axes(handles.fused_axis);
 plot_fused_image(handles);
 axis off;
 
+%show metrics 
 cd('Metrics');
-sc=spatial(handles.F,handles.P);
-set(handles.edit1,'String',num2str(sc));
+% metrics=getImageMetrics(handles.M,handles.P,handles.F);
+spacial_coeff=spatial(handles.F,handles.P);
+set(handles.spacial,'String',num2str(spacial_coeff(1)));
+rmse_value=RMSE1(handles.M,handles.F);
+set(handles.rmse,'String',num2str(rmse_value));
+corrcoef_value=corrcoef(handles.M,handles.F);
+set(handles.corrcoef,'String',num2str(corrcoef_value(1)));
+disp(corrcoef_value);
 cd ..;
 
 % UIWAIT makes fusion_result_gui wait for user response (see UIRESUME)
@@ -166,26 +173,3 @@ function view_fused_Callback(hObject, eventdata, handles)
 figure,
 axis on;
 plot_fused_image(handles);
-
-
-
-function edit1_Callback(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: get(hObject,'String') returns contents of edit1 as text
-%        str2double(get(hObject,'String')) returns contents of edit1 as a double
-
-
-% --- Executes during object creation, after setting all properties.
-function edit1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: edit controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end

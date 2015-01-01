@@ -1,17 +1,17 @@
-function C=fusion(x1,x2)
+function fusion_inihs_gamut(x1,x2)
 
-% % [gifImage cmap] = imread(x1);
-% % RGBImg = ind2rgb(gifImage, cmap);
-%  RGBImg=imread(x1);
+[gifImage cmap] = imread(x1);
+RGBImg = ind2rgb(gifImage, cmap);
+% RGBImg=imread(x1);
 % [gif cmap]=rgb2ind(RGBImg,128);
-% % The modified colormap is brighter if 0 < beta < 1 and darker if -1 < beta < 0. 
-% % brighten(beta), followed by brighten(-beta), where beta < 1, restores the original map.
-% %  cmap=brighten(-0.09);
+% The modified colormap is brighter if 0 < beta < 1 and darker if -1 < beta < 0. 
+% brighten(beta), followed by brighten(-beta), where beta < 1, restores the original map.
+%  cmap=brighten(-0.09);
 % RGBImg = ind2rgb(gif,cmap);
-% RGBImg=imresize(RGBImg,[256 256]);
-% subplot(2,3, 1);
-% imshow(RGBImg),title('Multispectral Image');
-F1=im2double(x1);
+RGBImg=imresize(RGBImg,[256 256]);
+subplot(2,3, 1);
+imshow(RGBImg),title('Multispectral Image');
+F1=im2double(RGBImg);
 r=F1(:,:,1);
 g=F1(:,:,2);
 b=F1(:,:,3);
@@ -31,40 +31,40 @@ S=1-3.*(min(min(r,g),b))./(r+g+b+eps);
 id=find(I>I1);
 S(id)=1-3.*(1-max(max(r(id),g(id)),b(id)))./(3-(r(id)+g(id)+b(id)+eps));
 hsi=cat(3,H,S,I);
+subplot(2,3, 3);
+imshow(hsi),title('iNIHS  Image');
+%start calculation on pan
 
-disp(hsi>1);
-% subplot(2,3, 3);
-% imshow(hsi),title('iNIHS  Image');
-% %start calculation on pan
-% 
-% % % [gifImage cmap] = imread(x2);
-% % % PANImg = ind2rgb(gifImage, cmap);
-% PANImg= imread(x2);
-% PANImg=imresize(PANImg,[256 256]);
+% % [gifImage cmap] = imread(x2);
+% % PANImg = ind2rgb(gifImage, cmap);
+PANImg= imread(x2);
+PANImg=imresize(PANImg,[256 256]);
 % PANImg=rgb2gray(PANImg);
-% subplot(2,3,2);
-% imshow(PANImg),title('Panchromatic Image');
-% F1=im2double(PANImg);
-% % r=F1(:,:,1);
-% % g=F1(:,:,2);
-% % b=F1(:,:,3);
-% % I=(r+g+b)/3;
-F1=im2double(x2);
+subplot(2,3,2);
+imshow(PANImg),title('Panchromatic Image');
+F1=im2double(PANImg);
+% r=F1(:,:,1);
+% g=F1(:,:,2);
+% b=F1(:,:,3);
+% I=(r+g+b)/3;
 I=F1;
 %end
 hsi=cat(3,H,S,I);
 %disp(hsi);
-% subplot(2,3, 4);
-% imshow(hsi),title('iNIHS After Intensity Substitution');
+subplot(2,3, 4);
+imshow(hsi),title('iNIHS After Intensity Substitution');
  C=iNIHS2RGB(hsi);
 %  disp(C);
-% subplot(2,3, 5);
-% imshow(C),title('HSI to RGB');
+subplot(2,3, 5);
+imshow(C),title('HSI to RGB');
 % C=rgb2gray(C);
 %spectrum=log(1+abs(fftshift(fft2(C))));
-% subplot(2,3, 6);
-% imshow(C),title('Gamut Problem');
-% disp(C);
+subplot(2,3, 6);
+gamut=zeros(size(hsi));
+gamut(C>1 | C <0)=1;
+colormap(gray);
+imshow(gamut),title('Gamut Problem');
+
 end
 function C=iNIHS2RGB(hsi)
 HV=hsi(:,:,1)*2*pi;
